@@ -9,11 +9,18 @@ import SwiftUI
 import WatchKit
 
 struct ContentView: View {
-    @State private var bpm: Int = 120
+    @State var bpm = 120
+    @State private var selectedTab = 1
     var body: some View {
-        TabView {
-            HapticView()
+        TabView(selection: $selectedTab) {
+            HapticView(bpm: $bpm)
+                .tag(0)
+            MainView(bpm: $bpm)
+                .tag(1)
             FlashView(bpm: $bpm)
+                .tag(2)
+            SoundView(bpm: $bpm)
+                .tag(3)
         }
         .tabViewStyle(.page)
     }

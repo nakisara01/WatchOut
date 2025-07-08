@@ -20,6 +20,8 @@ struct FlashView: View {
                 Color.green
                     .ignoresSafeArea()
             }
+            Text("\(bpm) BPM")
+                .padding(.bottom, 100)
             
             Button(isFlashing ? "Stop Flash" : "Flash") {
                 let now = Date()
@@ -33,7 +35,7 @@ struct FlashView: View {
                         }
                     }
                 } else {
-                    if let last = lastTapTime, now.timeIntervalSince(last) < 1.0 {
+                    if let last = lastTapTime, now.timeIntervalSince(last) < 0.2 {
                         timer?.invalidate()
                         timer = nil
                         isFlashing = false
