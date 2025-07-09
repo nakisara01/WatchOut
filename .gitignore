@@ -1,0 +1,19 @@
+# macOS 관련
+.DS_Store
+
+DerivedData/
+*.xcworkspace
+xcuserdata/
+*.xcuserstate
+
+.build/
+
+*.log
+*.tmp
+
+*~
+*.swp
+*.swo
+
+.idea/
+.vscode/
