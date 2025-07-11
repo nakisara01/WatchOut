@@ -13,7 +13,8 @@ struct MainView: View {
     @Binding var bpm: Int
     var body: some View {
         VStack {
-            Text("햅틱, 플래시")
+            Text("피드백 테스트용 앱")
+                .padding(.bottom, 20)
             HStack{
                 Button("-"){
                     bpm -= 10
