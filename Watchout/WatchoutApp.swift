@@ -11,7 +11,7 @@ import SwiftUI
 struct WatchoutApp: App {
     var body: some Scene {
         WindowGroup {
-            MotionView()
+            PracticeSyncView()
         }
     }
 }

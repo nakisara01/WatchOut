@@ -8,7 +8,7 @@
 import SwiftUI
 import WatchKit
 
-struct ContentView: View {
+struct SpeedContentView: View {
     @State var bpm = 120
     @State private var selectedTab = 0
     var body: some View {
@@ -29,5 +29,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    SpeedContentView()
 }

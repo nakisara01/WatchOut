@@ -18,7 +18,13 @@ struct MotionView: View {
     @State private var isShaking = false
     @State private var acceleration: CMAcceleration = .init(x: 0, y: 0, z: 0)
     @State private var logs: [String] = []
+    @State private var zLogData: [AccelerationData] = []
     private let motionManager = CMMotionManager()
+    
+    struct AccelerationData: Codable {
+        let timestamp: Double
+        let user_acc_z: Double
+    }
     
     var body: some View {
         VStack {
@@ -38,6 +44,7 @@ struct MotionView: View {
                     } else{
                         print("측정 시작")
                         startDetectingShakes()
+                        printSampleJSONToConsole()
                         
                     }
                     isShaking.toggle()
@@ -66,11 +73,16 @@ struct MotionView: View {
             guard let acceleration = data?.acceleration else { return }
             
             self.acceleration = acceleration
+            let now = ProcessInfo.processInfo.systemUptime
+            zLogData.append(AccelerationData(timestamp: now, user_acc_z: acceleration.z))
             
-            let thresholdZ = -1.2
-            let now = Date().timeIntervalSince1970
+            let thresholdZ = -1.1
             let minInterval = 0.35
-            print("Z값: \(acceleration.z), 시간차: \(now - lastTriggerTime)")
+            let jsonSample = AccelerationData(timestamp: now, user_acc_z: acceleration.z)
+            if let jsonData = try? JSONEncoder().encode(jsonSample),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                print(jsonString + ",")
+            }
             let logEntry = String(format: "Z값: %.3f, 시간차: %.3f", acceleration.z, now - lastTriggerTime)
             logs.append(logEntry)
 
@@ -154,6 +166,19 @@ struct MotionView: View {
         
         return standardDeviation
         
+    }
+    func printSampleJSONToConsole() {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        
+        do {
+            let jsonData = try encoder.encode(zLogData)
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                print("📦 측정된 Z값 기반 JSON 출력:\n\(jsonString)")
+            }
+        } catch {
+            print("❌ JSON 인코딩 실패: \(error.localizedDescription)")
+        }
     }
 }
 
